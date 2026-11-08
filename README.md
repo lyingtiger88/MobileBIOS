@@ -65,6 +65,19 @@ No successful build or QEMU boot is claimed until the test is actually run and r
 - Never assume hardware support from CPU architecture alone.
 - Record decisions and test evidence in Git commits and documentation.
 
+## Build the virtual prototype
+
+On Ubuntu or WSL2, install the host prerequisites and build the pinned ArmVirtQemu target:
+
+```bash
+bash scripts/setup-ubuntu.sh
+bash scripts/build-qemu.sh
+```
+
+To launch QEMU after building, use `bash scripts/build-qemu.sh --run` (graphical) or `--headless` (headless). These commands build and test the virtual ARM platform only; they do not flash or support a physical phone or tablet.
+
+See the [development guide](docs/DEVELOPMENT.md) for the pinned EDK II revision, setup details, and test-evidence requirements.
+
 ## Documentation
 
 - [Architecture](docs/ARCHITECTURE.md)
