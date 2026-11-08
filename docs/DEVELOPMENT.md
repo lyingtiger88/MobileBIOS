@@ -17,7 +17,7 @@ bash scripts/setup-ubuntu.sh
 
 The helper installs the host packages needed for the initial workflow: Git, Python 3 with venv/pip, build tools, UUID development headers, and QEMU ARM system emulation.
 
-The EDK II ArmVirtPkg PlatformCI Pytools workflow resolves its firmware build dependencies. The helper intentionally does not install random compiler versions globally.
+The EDK II ArmVirtPkg PlatformCI Pytools workflow resolves its firmware build dependencies. The upstream ArmVirtPkg guide documents Python 3.12.x as its reference environment. If your system's default Python is older or dependency installation fails, install Python 3.12 and select it explicitly with the PYTHON_BIN variable. The helper intentionally does not install random compiler versions globally.
 
 ## 2. Build the AArch64 firmware
 
@@ -25,12 +25,18 @@ The EDK II ArmVirtPkg PlatformCI Pytools workflow resolves its firmware build de
 bash scripts/build-qemu.sh
 ```
 
+To select a specific Python interpreter (recommended when Python 3.12 is installed):
+
+```bash
+PYTHON_BIN=python3.12 bash scripts/build-qemu.sh
+```
+
 The script:
 
 1. Clones EDK II into the ignored `.deps/edk2` directory if it is not already present.
 2. Checks that the checkout matches the pinned stable release commit.
 3. Creates a local Python virtual environment in `.venv-edk2`.
-4. Installs the EDK II Python requirements.
+4. Creates a local Python virtual environment using the selected interpreter and installs the EDK II Python requirements.
 5. Runs `stuart_setup`, `stuart_update`, and `stuart_build` for `ArmVirtPkg/PlatformCI/QemuBuild.py`, `GCC`, and `AARCH64`.
 
 The first run requires network access and can take time because EDK II dependencies and build tools may need to be downloaded.
