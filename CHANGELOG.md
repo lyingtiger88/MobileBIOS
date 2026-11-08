@@ -10,7 +10,7 @@ All notable project changes are recorded here. This file tracks repository chang
 - Draft architecture, roadmap, and development documentation.
 - Architecture decision records for EDK II/AArch64 and QEMU-first validation.
 - Ubuntu/WSL2 prerequisite setup helper.
-- Pinned EDK II ArmVirtQemu build and QEMU launch helper.
+- Pinned EDK II ArmVirtQemu build and QEMU launch helper, with selectable Python interpreter.
 
 ### Technical baseline
 - EDK II tag: edk2-stable202608
