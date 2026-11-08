@@ -1,50 +1,91 @@
 # Development Setup
 
-This document will become the reproducible build guide for MobileBIOS.
+**Reference host:** Ubuntu Linux (including Ubuntu under WSL2) on x86_64  
+**Initial target:** EDK II ArmVirtPkg / AArch64 / QEMU `virt`  
+**Pinned EDK II release:** `edk2-stable202608`  
+**Pinned EDK II commit:** `2970e5699ba6267f3384ffab20f96647578aebc8`
 
-## Current state
+> The scripts and instructions below are committed, but they have not yet been executed on the user's machine. A successful build or QEMU boot is not claimed.
 
-The repository currently contains project documentation only. A working EDK II build environment has not yet been configured or verified.
+## 1. Install host prerequisites
 
-## Planned host environment
+From the repository root:
 
-The initial reference environment is Ubuntu Linux on x86_64. Other hosts may work, but they are not yet validated.
+```bash
+bash scripts/setup-ubuntu.sh
+```
 
-Expected tool categories:
+The helper installs the host packages needed for the initial workflow: Git, Python 3 with venv/pip, build tools, UUID development headers, and QEMU ARM system emulation.
 
-- Git
-- Python 3
-- GNU Make and standard build utilities
-- A supported AArch64 GCC toolchain
-- NASM and other EDK II build dependencies required by the selected target
-- QEMU with AArch64 system emulation
+The EDK II ArmVirtPkg PlatformCI Pytools workflow resolves its firmware build dependencies. The helper intentionally does not install random compiler versions globally.
 
-Exact package names and versions will be recorded after the first clean setup is tested.
+## 2. Build the AArch64 firmware
 
-## EDK II source
+```bash
+bash scripts/build-qemu.sh
+```
 
-The first prototype will use TianoCore EDK II and the ArmVirtPkg platform. The exact commit or stable tag must be pinned before recording a reproducible build.
+The script:
 
-Do not copy an arbitrary EDK II checkout into this repository. Prefer a documented external checkout or a pinned Git submodule once the dependency layout is finalized.
+1. Clones EDK II into the ignored `.deps/edk2` directory if it is not already present.
+2. Checks that the checkout matches the pinned stable release commit.
+3. Creates a local Python virtual environment in `.venv-edk2`.
+4. Installs the EDK II Python requirements.
+5. Runs `stuart_setup`, `stuart_update`, and `stuart_build` for `ArmVirtPkg/PlatformCI/QemuBuild.py`, `GCC`, and `AARCH64`.
 
-## First target
+The first run requires network access and can take time because EDK II dependencies and build tools may need to be downloaded.
 
-- EDK II platform: ArmVirtPkg
-- DSC: ArmVirtPkg/ArmVirtQemu.dsc
-- Architecture: AARCH64
-- QEMU machine: virt
+## 3. Run the firmware in QEMU
 
-The exact build command, firmware output path, QEMU invocation, and expected serial output will be added after they are verified against the pinned EDK II revision.
+Graphical QEMU:
 
-## Reporting a successful test
+```bash
+bash scripts/build-qemu.sh --run
+```
 
-For every build or boot test, record:
+Headless QEMU:
 
-1. Date and host OS/version
-2. EDK II revision
-3. Compiler and tool versions
-4. Full build command and exit status
-5. QEMU version and full invocation
-6. Result, relevant serial log, and known warnings
+```bash
+bash scripts/build-qemu.sh --headless
+```
 
-A command copied into documentation is not a test result. Only actual output counts.
+The run modes use the EDK II PlatformCI `--FlashRom` workflow. QEMU must be available in PATH. The headless mode sets `QEMU_HEADLESS=TRUE`.
+
+## 4. EDK II source pin
+
+The EDK II checkout is kept outside the MobileBIOS source tree under `.deps/edk2`. The project pins both the stable tag and its resolved commit SHA so a moved tag or changed upstream default branch cannot silently alter the baseline.
+
+To intentionally upgrade EDK II:
+
+1. Review the upstream release notes and relevant ArmVirtPkg changes.
+2. Resolve the new tag to a commit SHA.
+3. Update `EDK2_REF` and `EDK2_COMMIT` in `scripts/build-qemu.sh`.
+4. Test a clean build and QEMU boot.
+5. Record the upgrade in an architecture decision record and commit the evidence.
+
+## 5. Test evidence checklist
+
+After running the commands, record:
+
+- Date and Ubuntu/WSL version
+- EDK II tag and commit
+- Python, GCC toolchain, and QEMU versions
+- Exact command and exit status
+- Whether QEMU opened and reached UEFI Shell/Boot Manager
+- Relevant build and serial logs
+- Warnings or failures
+
+A command in a script is not evidence that it succeeded. Only actual local output counts.
+
+## 6. Troubleshooting
+
+- If the pinned EDK II checkout exists but has a different commit, the script stops rather than overwriting it.
+- To use a clean checkout, move or remove only the project's `.deps/edk2` directory after confirming it contains no local work.
+- If QEMU cannot be found, verify that `qemu-system-aarch64` is installed and available in PATH.
+- If dependency resolution fails, preserve the complete Stuart log and the failing command before changing tool versions.
+
+## References
+
+- [EDK II ArmVirtPkg PlatformCI build instructions](https://github.com/tianocore/edk2/blob/edk2-stable202608/ArmVirtPkg/PlatformCI/ReadMe.md)
+- [EDK II Build Instructions](https://www.tianocore.org/tianocore-wiki.github.io/build-tooling/build-workflows/build.html)
+- [EDK II source](https://github.com/tianocore/edk2)
