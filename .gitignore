@@ -1,0 +1,39 @@
+# Build outputs
+Build/
+Build-*/
+Conf/
+*.efi
+*.fd
+*. FV
+*.map
+*.pdb
+*.d
+*.o
+*.obj
+*.lib
+*.a
+*.so
+*.dll
+*.exe
+
+# EDK II generated files
+*.efi.debug
+*.depex
+AutoGen.c
+AutoGen.h
+AutoGen.c.*
+AutoGen.h.*
+
+# Tool and editor artifacts
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.orig
