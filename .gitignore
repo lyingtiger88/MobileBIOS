@@ -2,9 +2,11 @@
 Build/
 Build-*/
 Conf/
+.deps/
+.venv*/
 *.efi
 *.fd
-*. FV
+*.fv
 *.map
 *.pdb
 *.d
