@@ -6,6 +6,7 @@ EDK2_REF="${EDK2_REF:-edk2-stable202608}"
 EDK2_COMMIT="2970e5699ba6267f3384ffab20f96647578aebc8"
 EDK2_DIR="${EDK2_DIR:-$ROOT/.deps/edk2}"
 VENV_DIR="${VENV_DIR:-$ROOT/.venv-edk2}"
+PYTHON_BIN="${PYTHON_BIN:-python3}"
 
 RUN_QEMU=0
 HEADLESS=0
@@ -24,6 +25,7 @@ Usage: scripts/build-qemu.sh [--run|--headless]
 Environment overrides:
   EDK2_DIR     Existing EDK II checkout location.
   VENV_DIR     Python virtual environment location.
+  PYTHON_BIN   Python interpreter (upstream currently recommends Python 3.12).
 USAGE
             exit 0
             ;;
@@ -34,9 +36,9 @@ USAGE
     esac
 done
 
-for tool in git python3; do
+for tool in git "$PYTHON_BIN"; do
     if ! command -v "$tool" >/dev/null 2>&1; then
-        echo "Missing required command: $tool. Run scripts/setup-ubuntu.sh first." >&2
+        echo "Missing required command: $tool. Install it or set PYTHON_BIN to a valid interpreter." >&2
         exit 1
     fi
 done
@@ -65,7 +67,7 @@ if [[ ! -f "$EDK2_DIR/ArmVirtPkg/PlatformCI/QemuBuild.py" ]]; then
     exit 1
 fi
 
-python3 -m venv "$VENV_DIR"
+"$PYTHON_BIN" -m venv "$VENV_DIR"
 # shellcheck disable=SC1091
 source "$VENV_DIR/bin/activate"
 python -m pip install --upgrade pip
