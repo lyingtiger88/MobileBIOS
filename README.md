@@ -78,6 +78,13 @@ To launch QEMU after building, use `bash scripts/build-qemu.sh --run` (graphical
 
 See the [development guide](docs/DEVELOPMENT.md) for the pinned EDK II revision, setup details, and test-evidence requirements.
 
+## Project continuity
+
+- [Current project status](docs/STATUS.md): milestone state, blockers, evidence, and next actions.
+- [Session handoff](docs/HANDOFF.md): decisions, work log, exact resume point, and handoff template.
+
+Update both documents after meaningful work. Never mark a build, test, or device port complete without evidence.
+
 ## Documentation
 
 - [Architecture](docs/ARCHITECTURE.md)
