@@ -1,6 +1,6 @@
 # Project Status
 
-**Last updated:** 2026-11-09  
+**Last updated:** 2026-11-10  
 **Repository:** [lyingtiger88/MobileBIOS](https://github.com/lyingtiger88/MobileBIOS)  
 **Baseline commit:** `2145b0786bf19c1da0af70213f3909684f61e0f5`  
 **Overall state:** Planning and build-environment preparation  
@@ -67,3 +67,14 @@
 | Date | Change |
 | --- | --- |
 | 2026-11-09 | Added project continuity documentation. Initial state reconciled against the repository's current README, roadmap, and development guide. No new build or hardware test was performed. |
+
+
+## Windows host preparation update (2026-11-10)
+
+- [x] User confirmed Visual Studio 2022 is installed.
+- [x] Added `scripts/report-windows.ps1` to collect a read-only Windows/VS2022/toolchain/repository diagnostic report.
+- [ ] Run the report on the user's Windows machine and inspect the actual installed components and tool versions.
+- [ ] Decide the supported Windows build route from the report and pinned EDK II ArmVirtPkg requirements.
+- [ ] Do not claim native Windows build support until the exact toolchain has completed a clean build and QEMU boot.
+
+The earlier Ubuntu/WSL setup remains documented, but it is not the selected host workflow for the next investigation. No Windows build has been run or validated.
