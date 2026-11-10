@@ -95,3 +95,24 @@ A command in a script is not evidence that it succeeded. Only actual local outpu
 - [EDK II ArmVirtPkg PlatformCI build instructions](https://github.com/tianocore/edk2/blob/edk2-stable202608/ArmVirtPkg/PlatformCI/ReadMe.md)
 - [EDK II Build Instructions](https://www.tianocore.org/tianocore-wiki.github.io/build-tooling/build-workflows/build.html)
 - [EDK II source](https://github.com/tianocore/edk2)
+
+
+## Windows environment report
+
+The current project host preference is native Windows with Visual Studio 2022. Before selecting or changing the EDK II build toolchain, collect a machine report:
+
+Run PowerShell from the MobileBIOS repository root:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\report-windows.ps1
+```
+
+The script writes a Markdown report to the current user's temporary directory and prints its path. It detects Windows and PowerShell versions, Visual Studio installations and selected C++ components, checks whether the MSVC developer environment can run `cl /Bv`, and records versions/locations for Git, Python, NASM, IASL, QEMU, CMake, and Ninja. It also records the repository branch/commit/working-tree state and any local `.deps\edk2` checkout.
+
+To choose a different output path:
+
+```powershell
+.\scripts\report-windows.ps1 -OutputPath .\windows-environment-report.md
+```
+
+This is a read-only diagnostic script: it does not install tools, alter system settings, modify project files, or build firmware. Review the generated report for local paths before sharing it. A report is diagnostic evidence only; it is not proof that an EDK II build works on Windows.
