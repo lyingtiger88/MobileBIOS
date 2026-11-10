@@ -33,7 +33,7 @@ MobileBIOS is a modular ARM64/AArch64 UEFI firmware platform based on TianoCore 
 - Framework: TianoCore EDK II.
 - EDK II baseline: `edk2-stable202608`, commit `2970e5699ba6267f3384ffab20f96647578aebc8`.
 - First validation target: ArmVirtPkg / QEMU ARM `virt`.
-- Host workflow: Ubuntu Linux or Ubuntu under WSL2.
+- User-selected host preference: native Windows with Visual Studio 2022. This is a requested workflow, not yet a validated EDK II build configuration.
 - ARM32 is outside the first milestone.
 
 ### Repository baseline
@@ -92,3 +92,26 @@ For future sessions, replace the current snapshot above with:
 - **Next actions:** ordered, concrete steps for the next session.
 - **Do not repeat:** already completed checks or rejected approaches.
 - **Approval boundary:** any code, architecture, or scope changes still requiring user approval.
+
+
+## Handoff update: Windows environment report (2026-11-10)
+
+### User decision
+- User confirmed Visual Studio 2022 is installed.
+- User wants to proceed with a Windows-native workflow rather than defaulting to Ubuntu/WSL.
+
+### Change made
+- Added `scripts/report-windows.ps1`.
+- The script reports Windows/PowerShell details, detected Visual Studio instances and selected components, MSVC `cl /Bv` availability, common EDK II tools, Python installations, repository Git state, and the local EDK II checkout state.
+- Default report destination is the user's temporary directory. An explicit `-OutputPath` can override it.
+- The script is diagnostic only; it does not install tools, change settings, or run a firmware build.
+
+### Exact next actions
+1. From the MobileBIOS repository root, run:
+   ```powershell
+   powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\report-windows.ps1
+   ```
+2. Open the generated Markdown report and share its contents after reviewing local paths.
+3. Based on the actual installed VS components and tool versions, determine whether the pinned ArmVirtPkg build can use a native Windows toolchain or needs a different supported route.
+4. Only then implement a Windows build script. Do not alter the pinned EDK II baseline or existing Linux scripts without explicit approval.
+5. No firmware build or QEMU boot has been performed in this update.
