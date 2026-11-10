@@ -78,6 +78,8 @@ To launch QEMU after building, use `bash scripts/build-qemu.sh --run` (graphical
 
 See the [development guide](docs/DEVELOPMENT.md) for the pinned EDK II revision, setup details, and test-evidence requirements.
 
+For a read-only report of a Windows development machine and its Visual Studio 2022 / EDK II prerequisites, run `powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\report-windows.ps1`. See [Windows report instructions](docs/DEVELOPMENT.md#windows-environment-report).
+
 ## Project continuity
 
 - [Current project status](docs/STATUS.md): milestone state, blockers, evidence, and next actions.
